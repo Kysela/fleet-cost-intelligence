@@ -1,0 +1,145 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "name": "Fleet Cost Intelligence",
+  "description": "AI-Powered Fleet Operations Decision Engine - Transform GPS telemetry into actionable business intelligence",
+  "services": [
+    {
+      "name": "redis",
+      "icon": "https://railway.app/icons/redis.svg",
+      "image": "redis:7-alpine",
+      "deploy": {
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      }
+    },
+    {
+      "name": "backend",
+      "source": {
+        "repo": "Kysela/fleet-cost-intelligence",
+        "directory": "/backend"
+      },
+      "build": {
+        "builder": "NIXPACKS",
+        "buildCommand": "npm ci && npm run build"
+      },
+      "deploy": {
+        "startCommand": "npm start",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10,
+        "healthcheckPath": "/api/health",
+        "healthcheckTimeout": 100,
+        "numReplicas": 1
+      },
+      "domains": [
+        {
+          "name": "fleet-backend"
+        }
+      ],
+      "env": {
+        "NODE_ENV": {
+          "description": "Node environment",
+          "default": "production"
+        },
+        "DEMO_MODE": {
+          "description": "Enable demo mode with mock GPS data (no real API key needed)",
+          "default": "true"
+        },
+        "PORT": {
+          "description": "Server port",
+          "default": "3000"
+        },
+        "GPS_API_BASE_URL": {
+          "description": "GPS Dozor API base URL (not needed in demo mode)",
+          "default": "https://www.gpsdozor.cz/api/v1"
+        },
+        "GPS_API_KEY": {
+          "description": "GPS API key (use 'dev-api-key' or 'demo' for mock data)",
+          "default": "demo"
+        },
+        "GPS_API_TIMEOUT": {
+          "description": "GPS API timeout in milliseconds",
+          "default": "10000"
+        },
+        "AI_API_KEY": {
+          "description": "OpenAI API key (optional - has fallback mode)",
+          "default": "sk-demo-key"
+        },
+        "AI_API_BASE_URL": {
+          "description": "AI API base URL",
+          "default": "https://api.openai.com/v1"
+        },
+        "AI_MODEL": {
+          "description": "AI model to use",
+          "default": "gpt-4o-mini"
+        },
+        "AI_TEMPERATURE": {
+          "description": "AI temperature setting",
+          "default": "0.3"
+        },
+        "AI_MAX_TOKENS": {
+          "description": "Maximum AI response tokens",
+          "default": "2000"
+        },
+        "AI_TIMEOUT": {
+          "description": "AI request timeout in milliseconds",
+          "default": "30000"
+        },
+        "CACHE_TTL_VEHICLES": {
+          "description": "Vehicle cache TTL in seconds",
+          "default": "60"
+        },
+        "CACHE_TTL_POSITIONS": {
+          "description": "Position cache TTL in seconds",
+          "default": "30"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "default": "info"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection URL for persistent caching",
+          "reference": "redis.url"
+        },
+        "CACHE_TTL_ANALYTICS": {
+          "description": "Analytics cache TTL in seconds",
+          "default": "300"
+        }
+      }
+    },
+    {
+      "name": "frontend",
+      "source": {
+        "repo": "Kysela/fleet-cost-intelligence",
+        "directory": "/frontend"
+      },
+      "build": {
+        "builder": "NIXPACKS",
+        "buildCommand": "npm ci && npm run build",
+        "env": {
+          "VITE_API_BASE_URL": {
+            "reference": "backend.url",
+            "suffix": "/api"
+          }
+        }
+      },
+      "deploy": {
+        "startCommand": "npm run preview -- --host 0.0.0.0 --port $PORT",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10,
+        "numReplicas": 1
+      },
+      "domains": [
+        {
+          "name": "fleet-app"
+        }
+      ],
+      "env": {
+        "VITE_API_BASE_URL": {
+          "description": "Backend API URL (will be auto-filled with backend service URL)",
+          "reference": "backend.url",
+          "suffix": "/api"
+        }
+      }
+    }
+  ]
+}

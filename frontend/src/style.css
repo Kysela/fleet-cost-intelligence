@@ -1,0 +1,432 @@
+@import "tailwindcss";
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Leaflet styles */
+@import 'leaflet/dist/leaflet.css';
+
+/* Custom theme */
+@theme {
+  --color-fleet-50: #f0f9ff;
+  --color-fleet-100: #e0f2fe;
+  --color-fleet-200: #bae6fd;
+  --color-fleet-300: #7dd3fc;
+  --color-fleet-400: #38bdf8;
+  --color-fleet-500: #0ea5e9;
+  --color-fleet-600: #0284c7;
+  --color-fleet-700: #0369a1;
+  --color-fleet-800: #075985;
+  --color-fleet-900: #0c4a6e;
+  --color-fleet-950: #082f49;
+
+  --color-risk-low: #22c55e;
+  --color-risk-moderate: #eab308;
+  --color-risk-high: #f97316;
+  --color-risk-critical: #ef4444;
+
+  --color-efficiency-high: #22c55e;
+  --color-efficiency-medium: #eab308;
+  --color-efficiency-low: #ef4444;
+
+  --font-family-display: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+}
+
+/* Base styles */
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+  overflow-x: hidden;
+}
+
+/* Prevent horizontal overflow */
+* {
+  max-width: 100%;
+}
+
+/* Component styles */
+.kpi-card {
+  @apply bg-white rounded-xl shadow-sm border border-slate-200;
+  @apply p-4 sm:p-5;
+  @apply transition-shadow hover:shadow-md;
+  @apply overflow-hidden;
+}
+
+.kpi-value {
+  @apply text-3xl sm:text-4xl font-bold tracking-tight;
+}
+
+.kpi-label {
+  @apply text-xs sm:text-sm font-medium text-slate-500 uppercase tracking-wider;
+}
+
+/* AI Panel */
+.ai-panel {
+  @apply bg-gradient-to-br from-fleet-900 to-fleet-800 rounded-xl text-white;
+  @apply p-4 sm:p-5;
+  @apply border border-fleet-700;
+  @apply overflow-hidden;
+}
+
+.ai-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  @apply bg-fleet-700/50 text-fleet-200;
+}
+
+/* Risk severity colors */
+.severity-low {
+  @apply text-risk-low bg-risk-low/10 border-risk-low/20;
+}
+
+.severity-moderate {
+  @apply text-risk-moderate bg-risk-moderate/10 border-risk-moderate/20;
+}
+
+.severity-high {
+  @apply text-risk-high bg-risk-high/10 border-risk-high/20;
+}
+
+.severity-critical {
+  @apply text-risk-critical bg-risk-critical/10 border-risk-critical/20;
+}
+
+/* Navigation */
+.nav-tab-group {
+  @apply flex items-center gap-0.5 p-1 bg-slate-200 rounded-xl;
+  @apply border border-slate-300;
+}
+
+.nav-tab {
+  @apply px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg;
+  @apply transition-all duration-200 ease-in-out;
+  @apply text-slate-500 hover:text-slate-600 hover:bg-slate-100/50;
+}
+
+.nav-tab-active {
+  @apply bg-fleet-600 text-white;
+  @apply shadow-md;
+  @apply hover:bg-fleet-700 hover:text-white;
+}
+
+/* Ranking bars */
+.ranking-bar {
+  @apply h-1.5 sm:h-2 rounded-full bg-fleet-500 transition-all;
+}
+
+/* Tables */
+.data-table {
+  @apply w-full text-xs sm:text-sm;
+}
+
+.data-table th {
+  @apply text-left font-medium text-slate-500 uppercase tracking-wider text-xs py-2 sm:py-3 px-2 sm:px-4;
+  @apply border-b border-slate-200;
+}
+
+.data-table td {
+  @apply py-2 sm:py-3 px-2 sm:px-4 border-b border-slate-100;
+}
+
+.data-table tr:hover td {
+  @apply bg-slate-50;
+}
+
+/* Chart container */
+.chart-container {
+  @apply w-full h-40 sm:h-48 lg:h-64;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-slate-200 rounded;
+}
+
+/* Gauge styling */
+.gauge-container {
+  @apply relative flex items-center justify-center;
+}
+
+.gauge-value {
+  @apply absolute text-2xl sm:text-3xl font-bold;
+}
+
+.gauge-label {
+  @apply absolute bottom-0 text-xs sm:text-sm text-slate-500;
+}
+
+/* Responsive text utilities */
+.text-responsive-lg {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.text-responsive-xl {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.text-responsive-2xl {
+  @apply text-3xl sm:text-4xl lg:text-5xl;
+}
+
+/* Prevent text overflow */
+.text-safe {
+  @apply break-words overflow-hidden;
+  word-break: break-word;
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button, a, .cursor-pointer {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Leaflet popup styling */
+.leaflet-popup {
+  z-index: 1000 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 700 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 15px -3px rgba(0, 0, 0, 0.15),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #1e293b !important;
+  min-width: 240px !important;
+  max-width: 300px !important;
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.leaflet-popup-tip-container {
+  display: block !important;
+  margin-top: -1px !important;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-popup-close-button {
+  display: none !important;
+}
+
+/* Vehicle popup content styling */
+.vehicle-popup {
+  position: relative !important;
+}
+
+.popup-header-section {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  padding: 20px 20px 16px 20px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.popup-header-content {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.popup-vehicle-icon {
+  width: 40px !important;
+  height: 40px !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.popup-vehicle-icon svg {
+  width: 22px !important;
+  height: 22px !important;
+  color: white !important;
+}
+
+.popup-header {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  line-height: 1.3 !important;
+}
+
+.popup-header-label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 2px !important;
+}
+
+.popup-close-btn {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.15s ease !important;
+  flex-shrink: 0 !important;
+  margin-left: 12px !important;
+}
+
+.popup-close-btn:hover {
+  background: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+.popup-close-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.popup-body {
+  padding: 16px 20px 20px 20px !important;
+}
+
+.popup-status {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+  padding: 12px 14px !important;
+  background: #f8fafc !important;
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.popup-speed {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+}
+
+.popup-speed-unit {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  margin-left: 2px !important;
+}
+
+.popup-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 10px !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+
+.popup-badge-dot {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  animation: pulse-dot 2s infinite !important;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.popup-badge-moving {
+  background-color: #dcfce7 !important;
+  color: #16a34a !important;
+}
+
+.popup-badge-idle {
+  background-color: #fef3c7 !important;
+  color: #d97706 !important;
+}
+
+.popup-badge-off {
+  background-color: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+.popup-badge-off .popup-badge-dot {
+  animation: none !important;
+}
+
+.popup-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 12px 20px !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2) !important;
+}
+
+.popup-button:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
+  box-shadow: 0 4px 8px rgba(2, 132, 199, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.popup-button svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Container padding adjustments */
+@media (max-width: 640px) {
+  .container {
+    @apply px-3;
+  }
+}
+
+/* Ensure charts don't overflow */
+canvas {
+  max-width: 100% !important;
+}
